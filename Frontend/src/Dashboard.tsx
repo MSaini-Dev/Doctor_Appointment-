@@ -7,13 +7,13 @@ export default function Dashboard(): JSX.Element {
   const [sessions, setSessions] = useState<Array<any>>([]);
   const [selectedSession, setSelectedSession] = useState<any | null>(null);
   const [sessionForm, setSessionForm] = useState<{ date: string; checkin: string; checkout: string; totalTokens: number }>({ date: '', checkin: '09:00', checkout: '17:00', totalTokens: 10 });
-  const [settings, setSettings] = useState<any | null>(null);
+  // const [settings, setSettings] = useState<any | null>(null);
   const [holidays, setHolidays] = useState<Array<string>>([]);
   const [weeklyHolidays, setWeeklyHolidays] = useState<Array<string>>([]);
   const [holidayDate, setHolidayDate] = useState<string>('');
   const [selectedWeeklyHoliday, setSelectedWeeklyHoliday] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  // const [error, setError] = useState<string | null>(null);
   const [liveSummary, setLiveSummary] = useState<any | null>(null);
 
   const weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -53,7 +53,8 @@ export default function Dashboard(): JSX.Element {
         fetchPatients(data[0]._id);
       }
     } catch {
-      setError('Failed to load sessions');
+      // setError('Failed to load sessions');
+      console.error('Failed to load sessions');
     }
   };
 
@@ -61,11 +62,12 @@ export default function Dashboard(): JSX.Element {
     try {
       const res = await fetch('https://doctor-appointment-bfjd.onrender.com/settings');
       const data = await res.json();
-      setSettings(data);
+      // setSettings(data);
       setHolidays(data.holidays || []);
       setWeeklyHolidays(data.weeklyHolidays || []);
     } catch {
-      setError('Failed to load settings');
+      // setError('Failed to load settings');
+      console.error('Failed to load settings');
     }
   };
 
@@ -80,10 +82,10 @@ export default function Dashboard(): JSX.Element {
     }
   };
 
-  const handleSessionSelect = (session: any): void => {
-    setSelectedSession(session);
-    fetchPatients(session._id);
-  };
+  // const handleSessionSelect = (session: any): void => {
+  //   setSelectedSession(session);
+  //   fetchPatients(session._id);
+  // };
 
   const createSession = async (): Promise<void> => {
     try {
