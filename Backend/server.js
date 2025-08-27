@@ -221,7 +221,7 @@ app.post('/sessions/:id/stop', async (req, res) => {
 app.post("/", async (req, res) => {
   try {
     const number  = req.body.no;
-    const match = number.match(/\d{10}$/);
+    const match = number.slice(-11,-1);
 
 if (match) {
   const phone = match[0];
