@@ -45,7 +45,9 @@ function isHoliday(date, settings) {
   const dayName = getDayName(date);
   return settings.holidays.includes(date) || settings.weeklyHolidays.includes(dayName);
 }
-
+app.get('/', (req, res) => {
+  res.send('Doctor Appointment Management Backend is running.');
+});
 // HOLIDAY MANAGEMENT
 app.post('/holidays', async (req, res) => {
   const { date } = req.body;
