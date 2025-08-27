@@ -223,15 +223,15 @@ app.post("/", async (req, res) => {
     const number  = req.body.no;
     const match = number.slice(-11,-1);
 
-if (match) {
-  const phone = match[0];
-  console.log(phone); // "9876543210"
-
     const smsData = {
       from: match,      // sender number
       message: req.body.key,  // SMS text (should contain patient name)
       time: req.body.time     // SMS time
-    };} else {
+    };
+if (match) {
+  const phone = match[0];
+  console.log(phone); // "9876543210"
+} else {
   return res.status(400).json({ error: 'Invalid phone number format. Must contain'})
         }    // Validate required fields
     if (!smsData.from || !smsData.message) {
