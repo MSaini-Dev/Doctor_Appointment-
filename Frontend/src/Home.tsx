@@ -37,11 +37,12 @@ export default function DoctorPortfolio() {
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [liveSummary, setLiveSummary] = useState<LiveSummary | null>(null);
-  const [darkMode, setDarkMode] = useState<boolean>(false);
+  const [darkMode, setDarkMode] = useState<boolean>(localStorage.getItem('darkMode') === 'true');
   const [phoneError, setPhoneError] = useState<string>('');
   const backend = import.meta.env.VITE_API_BACKEND 
   // Apply theme to document
   useEffect(() => {
+    localStorage.setItem('darkMode', darkMode.toString());
     if (darkMode) {
       document.documentElement.classList.add('dark');
     } else {

@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Calendar, Clock, Users, Plus, Trash2, Play, Square, CheckCircle, AlertCircle, Home, CalendarDays, UserCheck } from 'lucide-react';
 
 export default function Dashboard(): JSX.Element {
-  const [activeTab, setActiveTab] = useState<string>('overview');
+
+  const [activeTab, setActiveTab] = useState<string>(localStorage.getItem('activeTab') || 'overview');
   const [patients, setPatients] = useState<Array<any>>([]);
   const [sessions, setSessions] = useState<Array<any>>([]);
   const [selectedSession, setSelectedSession] = useState<any | null>(null);
@@ -24,7 +25,9 @@ export default function Dashboard(): JSX.Element {
     const interval = setInterval(fetchLiveSummary, 30000);
     return () => clearInterval(interval);
   }, []);
-
+ useEffect(() => {
+  localStorage.setItem('activeTab', activeTab);
+ },[activeTab])
   const fetchInitialData = async (): Promise<void> => {
     await Promise.all([
       fetchSessions(),
