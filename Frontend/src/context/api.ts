@@ -98,7 +98,7 @@
 
 import axios from 'axios';
 
-const API_BASE = 'http://localhost:4000';
+const API_BASE = process.env.VITE_API_BACKEND ;
 
 export const apiService = {
   getClinicSettings: async (params: Record<string, unknown>) => {
