@@ -59,6 +59,7 @@ export default function DoctorPortfolio() {
         // Handle error silently
       }
     }
+    console.log('Backend URL:', backend);
     fetchLiveSummary();
     const interval = setInterval(fetchLiveSummary, 30000); // Update every 30 seconds
     return () => clearInterval(interval);
