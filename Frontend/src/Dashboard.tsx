@@ -271,19 +271,18 @@ export default function Dashboard(): JSX.Element {
       </div>
     );
   }
-
-  return (
-    <div className="flex min-h-screen bg-gray-50">
+return (
+    <div className="flex min-h-screen bg-sky-50">
       {/* Sidebar */}
-      <aside className="w-64 bg-white shadow-lg">
-        <div className="p-6 border-b">
-          <h1 className="text-xl font-bold text-gray-800">Clinic Dashboard</h1>
+      <aside className="hidden lg:block w-64 bg-white shadow-xl border-r border-sky-100">
+        <div className="p-6 border-b border-sky-100">
+          <h1 className="text-2xl font-bold text-sky-900">Clinic Dashboard</h1>
           {liveSummary && (
-            <div className="mt-2">
-              <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                liveSummary.todayStatus === 'Active' ? 'bg-green-100 text-green-800' :
-                liveSummary.todayStatus === 'Holiday' ? 'bg-red-100 text-red-800' :
-                'bg-gray-100 text-gray-800'
+            <div className="mt-3">
+              <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold ${
+                liveSummary.todayStatus === 'Active' ? 'bg-emerald-100 text-emerald-700' :
+                liveSummary.todayStatus === 'Holiday' ? 'bg-red-100 text-red-700' :
+                'bg-sky-100 text-sky-700'
               }`}>
                 {liveSummary.todayStatus === 'Active' && <CheckCircle className="w-3 h-3 mr-1" />}
                 {liveSummary.todayStatus === 'Holiday' && <AlertCircle className="w-3 h-3 mr-1" />}
@@ -294,12 +293,14 @@ export default function Dashboard(): JSX.Element {
           )}
         </div>
         
-        <nav className="mt-6">
-          <div className="px-6 space-y-2">
+        <nav className="mt-8 px-4">
+          <div className="space-y-3">
             <button
               onClick={() => setActiveTab('overview')}
-              className={`w-full flex items-center px-3 py-2 rounded-lg transition-colors ${
-                activeTab === 'overview' ? 'bg-indigo-100 text-indigo-700' : 'text-gray-600 hover:bg-gray-100'
+              className={`w-full flex items-center px-4 py-3 rounded-xl font-medium transition-all duration-200 ${
+                activeTab === 'overview' 
+                  ? 'bg-sky-500 text-white shadow-lg shadow-sky-200' 
+                  : 'text-sky-700 hover:bg-sky-50 hover:text-sky-900'
               }`}
             >
               <Home className="w-5 h-5 mr-3" />
@@ -308,8 +309,10 @@ export default function Dashboard(): JSX.Element {
             
             <button
               onClick={() => setActiveTab('sessions')}
-              className={`w-full flex items-center px-3 py-2 rounded-lg transition-colors ${
-                activeTab === 'sessions' ? 'bg-indigo-100 text-indigo-700' : 'text-gray-600 hover:bg-gray-100'
+              className={`w-full flex items-center px-4 py-3 rounded-xl font-medium transition-all duration-200 ${
+                activeTab === 'sessions' 
+                  ? 'bg-sky-500 text-white shadow-lg shadow-sky-200' 
+                  : 'text-sky-700 hover:bg-sky-50 hover:text-sky-900'
               }`}
             >
               <Clock className="w-5 h-5 mr-3" />
@@ -318,8 +321,10 @@ export default function Dashboard(): JSX.Element {
             
             <button
               onClick={() => setActiveTab('create-session')}
-              className={`w-full flex items-center px-3 py-2 rounded-lg transition-colors ${
-                activeTab === 'create-session' ? 'bg-indigo-100 text-indigo-700' : 'text-gray-600 hover:bg-gray-100'
+              className={`w-full flex items-center px-4 py-3 rounded-xl font-medium transition-all duration-200 ${
+                activeTab === 'create-session' 
+                  ? 'bg-sky-500 text-white shadow-lg shadow-sky-200' 
+                  : 'text-sky-700 hover:bg-sky-50 hover:text-sky-900'
               }`}
             >
               <Plus className="w-5 h-5 mr-3" />
@@ -328,8 +333,10 @@ export default function Dashboard(): JSX.Element {
             
             <button
               onClick={() => setActiveTab('holidays')}
-              className={`w-full flex items-center px-3 py-2 rounded-lg transition-colors ${
-                activeTab === 'holidays' ? 'bg-indigo-100 text-indigo-700' : 'text-gray-600 hover:bg-gray-100'
+              className={`w-full flex items-center px-4 py-3 rounded-xl font-medium transition-all duration-200 ${
+                activeTab === 'holidays' 
+                  ? 'bg-sky-500 text-white shadow-lg shadow-sky-200' 
+                  : 'text-sky-700 hover:bg-sky-50 hover:text-sky-900'
               }`}
             >
               <Calendar className="w-5 h-5 mr-3" />
@@ -338,8 +345,10 @@ export default function Dashboard(): JSX.Element {
 
             <button
               onClick={() => setActiveTab('patients')}
-              className={`w-full flex items-center px-3 py-2 rounded-lg transition-colors ${
-                activeTab === 'patients' ? 'bg-indigo-100 text-indigo-700' : 'text-gray-600 hover:bg-gray-100'
+              className={`w-full flex items-center px-4 py-3 rounded-xl font-medium transition-all duration-200 ${
+                activeTab === 'patients' 
+                  ? 'bg-sky-500 text-white shadow-lg shadow-sky-200' 
+                  : 'text-sky-700 hover:bg-sky-50 hover:text-sky-900'
               }`}
             >
               <UserCheck className="w-5 h-5 mr-3" />
@@ -349,14 +358,79 @@ export default function Dashboard(): JSX.Element {
         </nav>
       </aside>
 
+      {/* Mobile Navigation */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-sky-100 z-50">
+        <div className="flex justify-around py-2">
+          <button
+            onClick={() => setActiveTab('overview')}
+            className={`flex flex-col items-center px-2 py-2 text-xs font-medium transition-colors ${
+              activeTab === 'overview' 
+                ? 'text-sky-600' 
+                : 'text-sky-400 hover:text-sky-600'
+            }`}
+          >
+            <Home className="w-5 h-5 mb-1" />
+            Overview
+          </button>
+          
+          <button
+            onClick={() => setActiveTab('sessions')}
+            className={`flex flex-col items-center px-2 py-2 text-xs font-medium transition-colors ${
+              activeTab === 'sessions' 
+                ? 'text-sky-600' 
+                : 'text-sky-400 hover:text-sky-600'
+            }`}
+          >
+            <Clock className="w-5 h-5 mb-1" />
+            Sessions
+          </button>
+          
+          <button
+            onClick={() => setActiveTab('create-session')}
+            className={`flex flex-col items-center px-2 py-2 text-xs font-medium transition-colors ${
+              activeTab === 'create-session' 
+                ? 'text-sky-600' 
+                : 'text-sky-400 hover:text-sky-600'
+            }`}
+          >
+            <Plus className="w-5 h-5 mb-1" />
+            Create
+          </button>
+          
+          <button
+            onClick={() => setActiveTab('holidays')}
+            className={`flex flex-col items-center px-2 py-2 text-xs font-medium transition-colors ${
+              activeTab === 'holidays' 
+                ? 'text-sky-600' 
+                : 'text-sky-400 hover:text-sky-600'
+            }`}
+          >
+            <Calendar className="w-5 h-5 mb-1" />
+            Holidays
+          </button>
+
+          <button
+            onClick={() => setActiveTab('patients')}
+            className={`flex flex-col items-center px-2 py-2 text-xs font-medium transition-colors ${
+              activeTab === 'patients' 
+                ? 'text-sky-600' 
+                : 'text-sky-400 hover:text-sky-600'
+            }`}
+          >
+            <UserCheck className="w-5 h-5 mb-1" />
+            Patients
+          </button>
+        </div>
+      </div>
+
       {/* Main Content */}
-      <main className="flex-1 p-8 overflow-auto">
+      <main className="flex-1 p-4 sm:p-6 lg:p-8 overflow-auto mb-20 lg:mb-0">
         {/* Overview Tab */}
         {activeTab === 'overview' && (
           <div className="space-y-6">
-            <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-gray-800">Dashboard Overview</h2>
-              <div className="text-sm text-gray-500">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <h2 className="text-2xl sm:text-3xl font-bold text-sky-900">Dashboard Overview</h2>
+              <div className="text-sm text-sky-600 bg-white px-3 py-2 rounded-lg shadow-sm border border-sky-100">
                 {new Date().toLocaleDateString('en-US', { 
                   weekday: 'long', 
                   year: 'numeric', 
@@ -367,53 +441,53 @@ export default function Dashboard(): JSX.Element {
             </div>
 
             {/* Stats Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <div className="bg-white rounded-lg shadow p-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+              <div className="bg-white rounded-2xl shadow-sm border border-sky-100 p-6 hover:shadow-md transition-shadow">
                 <div className="flex items-center">
-                  <div className="p-2 bg-blue-100 rounded-lg">
-                    <Calendar className="w-6 h-6 text-blue-600" />
+                  <div className="p-3 bg-sky-100 rounded-xl">
+                    <Calendar className="w-6 h-6 text-sky-600" />
                   </div>
                   <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-500">Total Sessions</p>
-                    <p className="text-2xl font-semibold text-gray-900">{sessions.length}</p>
+                    <p className="text-sm font-medium text-sky-600">Total Sessions</p>
+                    <p className="text-2xl font-bold text-sky-900">{sessions.length}</p>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-white rounded-lg shadow p-6">
+              <div className="bg-white rounded-2xl shadow-sm border border-sky-100 p-6 hover:shadow-md transition-shadow">
                 <div className="flex items-center">
-                  <div className="p-2 bg-green-100 rounded-lg">
-                    <CheckCircle className="w-6 h-6 text-green-600" />
+                  <div className="p-3 bg-emerald-100 rounded-xl">
+                    <CheckCircle className="w-6 h-6 text-emerald-600" />
                   </div>
                   <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-500">Active Sessions</p>
-                    <p className="text-2xl font-semibold text-gray-900">
+                    <p className="text-sm font-medium text-sky-600">Active Sessions</p>
+                    <p className="text-2xl font-bold text-sky-900">
                       {sessions.filter(s => s.isActive).length}
                     </p>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-white rounded-lg shadow p-6">
+              <div className="bg-white rounded-2xl shadow-sm border border-sky-100 p-6 hover:shadow-md transition-shadow">
                 <div className="flex items-center">
-                  <div className="p-2 bg-yellow-100 rounded-lg">
-                    <Users className="w-6 h-6 text-yellow-600" />
+                  <div className="p-3 bg-amber-100 rounded-xl">
+                    <Users className="w-6 h-6 text-amber-600" />
                   </div>
                   <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-500">Total Patients</p>
-                    <p className="text-2xl font-semibold text-gray-900">{patients.length}</p>
+                    <p className="text-sm font-medium text-sky-600">Total Patients</p>
+                    <p className="text-2xl font-bold text-sky-900">{patients.length}</p>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-white rounded-lg shadow p-6">
+              <div className="bg-white rounded-2xl shadow-sm border border-sky-100 p-6 hover:shadow-md transition-shadow">
                 <div className="flex items-center">
-                  <div className="p-2 bg-red-100 rounded-lg">
-                    <CalendarDays className="w-6 h-6 text-red-600" />
+                  <div className="p-3 bg-rose-100 rounded-xl">
+                    <CalendarDays className="w-6 h-6 text-rose-600" />
                   </div>
                   <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-500">Holidays</p>
-                    <p className="text-2xl font-semibold text-gray-900">
+                    <p className="text-sm font-medium text-sky-600">Holidays</p>
+                    <p className="text-2xl font-bold text-sky-900">
                       {holidays.length + weeklyHolidays.length}
                     </p>
                   </div>
@@ -423,53 +497,53 @@ export default function Dashboard(): JSX.Element {
 
             {/* Live Session Info */}
             {liveSummary?.liveSession && (
-              <div className="bg-white rounded-lg shadow p-6">
-                <h3 className="text-lg font-semibold text-gray-800 mb-4">Live Session Status</h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="text-center">
-                    <p className="text-sm text-gray-500">Session Date</p>
-                    <p className="text-lg font-semibold">{liveSummary.liveSession.date}</p>
+              <div className="bg-white rounded-2xl shadow-sm border border-sky-100 p-6">
+                <h3 className="text-lg font-bold text-sky-900 mb-4">Live Session Status</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="text-center p-4 bg-sky-50 rounded-xl">
+                    <p className="text-sm text-sky-600 mb-1">Session Date</p>
+                    <p className="text-lg font-bold text-sky-900">{liveSummary.liveSession.date}</p>
                   </div>
-                  <div className="text-center">
-                    <p className="text-sm text-gray-500">Time</p>
-                    <p className="text-lg font-semibold">
+                  <div className="text-center p-4 bg-sky-50 rounded-xl">
+                    <p className="text-sm text-sky-600 mb-1">Time</p>
+                    <p className="text-lg font-bold text-sky-900">
                       {liveSummary.liveSession.checkin} - {liveSummary.liveSession.checkout}
                     </p>
                   </div>
-                  <div className="text-center">
-                    <p className="text-sm text-gray-500">Completed Patients</p>
-                    <p className="text-lg font-semibold">{liveSummary.completedPatients}</p>
+                  <div className="text-center p-4 bg-sky-50 rounded-xl">
+                    <p className="text-sm text-sky-600 mb-1">Completed Patients</p>
+                    <p className="text-lg font-bold text-sky-900">{liveSummary.completedPatients}</p>
                   </div>
                 </div>
               </div>
             )}
 
             {/* Recent Sessions */}
-            <div className="bg-white rounded-lg shadow">
-              <div className="p-6 border-b">
-                <h3 className="text-lg font-semibold text-gray-800">Recent Sessions</h3>
+            <div className="bg-white rounded-2xl shadow-sm border border-sky-100 overflow-hidden">
+              <div className="p-6 border-b border-sky-100">
+                <h3 className="text-lg font-bold text-sky-900">Recent Sessions</h3>
               </div>
               <div className="p-6">
                 {sessions.slice(0, 5).map(session => (
-                  <div key={session._id} className="flex items-center justify-between py-3 border-b last:border-b-0">
+                  <div key={session._id} className="flex flex-col sm:flex-row sm:items-center justify-between py-4 border-b border-sky-50 last:border-b-0 gap-3">
                     <div>
-                      <p className="font-medium text-gray-900">{session.date}</p>
-                      <p className="text-sm text-gray-500">{session.checkin} - {session.checkout}</p>
+                      <p className="font-semibold text-sky-900">{session.date}</p>
+                      <p className="text-sm text-sky-600">{session.checkin} - {session.checkout}</p>
                     </div>
-                    <div className="text-right">
-                      <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                        session.isActive ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+                    <div className="flex items-center gap-4">
+                      <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold ${
+                        session.isActive ? 'bg-emerald-100 text-emerald-700' : 'bg-sky-100 text-sky-700'
                       }`}>
                         {session.isActive ? 'Active' : 'Scheduled'}
                       </span>
-                      <p className="text-sm text-gray-500 mt-1">
+                      <p className="text-sm text-sky-600 font-medium">
                         {session.currentToken}/{session.totalTokens} tokens
                       </p>
                     </div>
                   </div>
                 ))}
                 {sessions.length === 0 && (
-                  <p className="text-center text-gray-500 py-8">No sessions scheduled</p>
+                  <p className="text-center text-sky-500 py-8">No sessions scheduled</p>
                 )}
               </div>
             </div>
@@ -479,50 +553,50 @@ export default function Dashboard(): JSX.Element {
         {/* Sessions Management Tab */}
         {activeTab === 'sessions' && (
           <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-gray-800">Manage Sessions</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-sky-900">Manage Sessions</h2>
             
-            <div className="bg-white rounded-lg shadow overflow-hidden">
+            <div className="bg-white rounded-2xl shadow-sm border border-sky-100 overflow-hidden">
               <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
+                <table className="min-w-full divide-y divide-sky-100">
+                  <thead className="bg-sky-50">
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs font-bold text-sky-700 uppercase tracking-wider">
                         Date & Time
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs font-bold text-sky-700 uppercase tracking-wider">
                         Tokens
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs font-bold text-sky-700 uppercase tracking-wider">
                         Status
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs font-bold text-sky-700 uppercase tracking-wider">
                         Actions
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
+                  <tbody className="bg-white divide-y divide-sky-50">
                     {sessions.map(session => (
-                      <tr key={session._id} className="hover:bg-gray-50">
+                      <tr key={session._id} className="hover:bg-sky-25">
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div>
-                            <div className="text-sm font-medium text-gray-900">{session.date}</div>
-                            <div className="text-sm text-gray-500">{session.checkin} - {session.checkout}</div>
+                            <div className="text-sm font-semibold text-sky-900">{session.date}</div>
+                            <div className="text-sm text-sky-600">{session.checkin} - {session.checkout}</div>
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">
+                          <div className="text-sm font-semibold text-sky-900">
                             {session.currentToken} / {session.totalTokens}
                           </div>
-                          <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
+                          <div className="w-full bg-sky-100 rounded-full h-2 mt-2">
                             <div 
-                              className="bg-blue-600 h-2 rounded-full" 
+                              className="bg-sky-500 h-2 rounded-full transition-all duration-300" 
                               style={{ width: `${(session.currentToken / session.totalTokens) * 100}%` }}
                             ></div>
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                            session.isActive ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+                          <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold ${
+                            session.isActive ? 'bg-emerald-100 text-emerald-700' : 'bg-sky-100 text-sky-700'
                           }`}>
                             {session.isActive ? 'Active' : 'Scheduled'}
                           </span>
@@ -531,7 +605,7 @@ export default function Dashboard(): JSX.Element {
                           {session.isActive ? (
                             <button
                               onClick={() => stopSession(session._id)}
-                              className="inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded text-white bg-red-600 hover:bg-red-700"
+                              className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-semibold rounded-lg text-white bg-rose-500 hover:bg-rose-600 transition-colors"
                             >
                               <Square className="w-3 h-3 mr-1" />
                               Stop
@@ -539,7 +613,7 @@ export default function Dashboard(): JSX.Element {
                           ) : (
                             <button
                               onClick={() => startSession(session._id)}
-                              className="inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded text-white bg-green-600 hover:bg-green-700"
+                              className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-semibold rounded-lg text-white bg-emerald-500 hover:bg-emerald-600 transition-colors"
                             >
                               <Play className="w-3 h-3 mr-1" />
                               Start
@@ -547,7 +621,7 @@ export default function Dashboard(): JSX.Element {
                           )}
                           <button
                             onClick={() => deleteSession(session._id)}
-                            className="inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded text-white bg-red-600 hover:bg-red-700"
+                            className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-semibold rounded-lg text-white bg-rose-500 hover:bg-rose-600 transition-colors"
                           >
                             <Trash2 className="w-3 h-3 mr-1" />
                             Delete
@@ -559,8 +633,8 @@ export default function Dashboard(): JSX.Element {
                 </table>
                 {sessions.length === 0 && (
                   <div className="text-center py-12">
-                    <Clock className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                    <p className="text-gray-500">No sessions found</p>
+                    <Clock className="w-12 h-12 text-sky-300 mx-auto mb-4" />
+                    <p className="text-sky-500">No sessions found</p>
                   </div>
                 )}
               </div>
@@ -571,12 +645,12 @@ export default function Dashboard(): JSX.Element {
         {/* Create Session Tab */}
         {activeTab === 'create-session' && (
           <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-gray-800">Create New Session</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-sky-900">Create New Session</h2>
             
-            <div className="bg-white rounded-lg shadow p-6 max-w-md">
-              <form onSubmit={(e: React.FormEvent) => { e.preventDefault(); createSession(); }} className="space-y-4">
+            <div className="bg-white rounded-2xl shadow-sm border border-sky-100 p-6 max-w-md mx-auto">
+              <form onSubmit={(e: React.FormEvent) => { e.preventDefault(); createSession(); }} className="space-y-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-sky-700 mb-2">
                     Session Date
                   </label>
                   <input
@@ -585,13 +659,13 @@ export default function Dashboard(): JSX.Element {
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSessionForm(prev => ({ ...prev, date: e.target.value }))}
                     required
                     min={new Date().toISOString().split('T')[0]}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full px-4 py-3 border border-sky-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent"
                   />
                 </div>
                 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-semibold text-sky-700 mb-2">
                       Check-in Time
                     </label>
                     <input
@@ -599,12 +673,12 @@ export default function Dashboard(): JSX.Element {
                       value={sessionForm.checkin}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSessionForm(prev => ({ ...prev, checkin: e.target.value }))}
                       required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      className="w-full px-4 py-3 border border-sky-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent"
                     />
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-semibold text-sky-700 mb-2">
                       Check-out Time
                     </label>
                     <input
@@ -612,13 +686,13 @@ export default function Dashboard(): JSX.Element {
                       value={sessionForm.checkout}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSessionForm(prev => ({ ...prev, checkout: e.target.value }))}
                       required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      className="w-full px-4 py-3 border border-sky-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent"
                     />
                   </div>
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-sky-700 mb-2">
                     Total Tokens
                   </label>
                   <input
@@ -628,13 +702,13 @@ export default function Dashboard(): JSX.Element {
                     value={sessionForm.totalTokens}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSessionForm(prev => ({ ...prev, totalTokens: parseInt(e.target.value) }))}
                     required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full px-4 py-3 border border-sky-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent"
                   />
                 </div>
                 
                 <button
                   type="submit"
-                  className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
+                  className="w-full bg-sky-500 text-white py-3 px-4 rounded-xl hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-sky-500 transition-colors font-semibold"
                 >
                   Create Session
                 </button>
@@ -646,38 +720,38 @@ export default function Dashboard(): JSX.Element {
         {/* Holiday Management Tab */}
         {activeTab === 'holidays' && (
           <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-gray-800">Holiday Management</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-sky-900">Holiday Management</h2>
             
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Specific Date Holidays */}
-              <div className="bg-white rounded-lg shadow p-6">
-                <h3 className="text-lg font-semibold text-gray-800 mb-4">Specific Date Holidays</h3>
+              <div className="bg-white rounded-2xl shadow-sm border border-sky-100 p-6">
+                <h3 className="text-lg font-bold text-sky-900 mb-4">Specific Date Holidays</h3>
                 
-                <div className="flex space-x-3 mb-4">
+                <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3 mb-4">
                   <input
                     type="date"
                     value={holidayDate}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setHolidayDate(e.target.value)}
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="flex-1 px-4 py-3 border border-sky-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent"
                   />
                   <button
                     onClick={addHoliday}
-                    className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors"
+                    className="px-6 py-3 bg-sky-500 text-white rounded-xl hover:bg-sky-600 transition-colors font-semibold"
                   >
                     Add
                   </button>
                 </div>
                 
-                <div className="max-h-64 overflow-y-auto space-y-2">
+                <div className="max-h-64 overflow-y-auto space-y-3">
                   {holidays.length === 0 && (
-                    <p className="text-sm text-gray-500 text-center py-4">No specific holidays set</p>
+                    <p className="text-sm text-sky-500 text-center py-8">No specific holidays set</p>
                   )}
                   {holidays.map(date => (
-                    <div key={date} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                      <span className="text-sm font-medium">{date}</span>
+                    <div key={date} className="flex justify-between items-center p-4 bg-sky-50 rounded-xl">
+                      <span className="text-sm font-semibold text-sky-900">{date}</span>
                       <button
                         onClick={() => deleteHoliday(date)}
-                        className="text-red-600 hover:text-red-800 p-1"
+                        className="text-rose-500 hover:text-rose-700 p-2 rounded-lg hover:bg-rose-50 transition-colors"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -687,14 +761,14 @@ export default function Dashboard(): JSX.Element {
               </div>
 
               {/* Weekly Holidays */}
-              <div className="bg-white rounded-lg shadow p-6">
-                <h3 className="text-lg font-semibold text-gray-800 mb-4">Weekly Holidays</h3>
+              <div className="bg-white rounded-2xl shadow-sm border border-sky-100 p-6">
+                <h3 className="text-lg font-bold text-sky-900 mb-4">Weekly Holidays</h3>
                 
-                <div className="flex space-x-3 mb-4">
+                <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3 mb-4">
                   <select
                     value={selectedWeeklyHoliday}
                     onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSelectedWeeklyHoliday(e.target.value)}
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="flex-1 px-4 py-3 border border-sky-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent"
                   >
                     <option value="">Select a day</option>
                     {weekDays.filter(day => !weeklyHolidays.includes(day)).map(day => (
@@ -704,22 +778,22 @@ export default function Dashboard(): JSX.Element {
                   <button
                     onClick={addWeeklyHoliday}
                     disabled={!selectedWeeklyHoliday}
-                    className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors disabled:bg-gray-400"
+                    className="px-6 py-3 bg-sky-500 text-white rounded-xl hover:bg-sky-600 transition-colors disabled:bg-sky-300 font-semibold"
                   >
                     Add
                   </button>
                 </div>
                 
-                <div className="space-y-2">
+                <div className="space-y-3">
                   {weeklyHolidays.length === 0 && (
-                    <p className="text-sm text-gray-500 text-center py-4">No weekly holidays set</p>
+                    <p className="text-sm text-sky-500 text-center py-8">No weekly holidays set</p>
                   )}
                   {weeklyHolidays.map(day => (
-                    <div key={day} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                      <span className="text-sm font-medium">Every {day}</span>
+                    <div key={day} className="flex justify-between items-center p-4 bg-sky-50 rounded-xl">
+                      <span className="text-sm font-semibold text-sky-900">Every {day}</span>
                       <button
                         onClick={() => deleteWeeklyHoliday(day)}
-                        className="text-red-600 hover:text-red-800 p-1"
+                        className="text-rose-500 hover:text-rose-700 p-2 rounded-lg hover:bg-rose-50 transition-colors"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -734,9 +808,9 @@ export default function Dashboard(): JSX.Element {
         {/* Patient Management Tab */}
         {activeTab === 'patients' && (
           <div className="space-y-6">
-            <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-gray-800">Patient Management</h2>
-              <div className="flex items-center space-x-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <h2 className="text-2xl sm:text-3xl font-bold text-sky-900">Patient Management</h2>
+              <div className="flex items-center">
                 <select
                   onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                     const session = sessions.find(s => s._id === e.target.value);
@@ -745,7 +819,7 @@ export default function Dashboard(): JSX.Element {
                       fetchPatients(session._id);
                     }
                   }}
-                  className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="px-4 py-3 border border-sky-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent min-w-0"
                   value={selectedSession?._id || ''}
                 >
                   <option value="">Select a session</option>
@@ -759,20 +833,20 @@ export default function Dashboard(): JSX.Element {
             </div>
 
             {selectedSession ? (
-              <div className="bg-white rounded-lg shadow overflow-hidden">
-                <div className="px-6 py-4 border-b bg-gray-50">
-                  <div className="flex items-center justify-between">
+              <div className="bg-white rounded-2xl shadow-sm border border-sky-100 overflow-hidden">
+                <div className="px-6 py-4 border-b border-sky-100 bg-sky-50">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
-                      <h3 className="text-lg font-semibold text-gray-800">
+                      <h3 className="text-lg font-bold text-sky-900">
                         Session: {selectedSession.date}
                       </h3>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-sky-600">
                         {selectedSession.checkin} - {selectedSession.checkout}
                       </p>
                     </div>
-                    <div className="text-right">
-                      <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                        selectedSession.isActive ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+                    <div>
+                      <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold ${
+                        selectedSession.isActive ? 'bg-emerald-100 text-emerald-700' : 'bg-sky-100 text-sky-700'
                       }`}>
                         {selectedSession.isActive ? 'Active' : 'Scheduled'}
                       </span>
@@ -781,56 +855,56 @@ export default function Dashboard(): JSX.Element {
                 </div>
 
                 <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
+                  <table className="min-w-full divide-y divide-sky-100">
+                    <thead className="bg-sky-50">
                       <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th className="px-6 py-4 text-left text-xs font-bold text-sky-700 uppercase tracking-wider">
                           Token
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th className="px-6 py-4 text-left text-xs font-bold text-sky-700 uppercase tracking-wider">
                           Patient Name
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th className="px-6 py-4 text-left text-xs font-bold text-sky-700 uppercase tracking-wider">
                           Phone
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th className="px-6 py-4 text-left text-xs font-bold text-sky-700 uppercase tracking-wider">
                           Status
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th className="px-6 py-4 text-left text-xs font-bold text-sky-700 uppercase tracking-wider">
                           Actions
                         </th>
                       </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
+                    <tbody className="bg-white divide-y divide-sky-50">
                       {patients.map(patient => (
-                        <tr key={patient._id} className="hover:bg-gray-50">
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        <tr key={patient._id} className="hover:bg-sky-25">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-sky-900">
                             #{patient.tokenNo}
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-sky-900">
                             {patient.name}
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-sky-600">
                             {patient.phone}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium capitalize ${getStatusColor(patient.status)}`}>
+                            <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold capitalize ${getStatusColor(patient.status)}`}>
                               {patient.status}
                             </span>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                            <div className="flex space-x-2">
+                            <div className="flex flex-wrap gap-2">
                               {patient.status === 'pending' && (
                                 <>
                                   <button
                                     onClick={() => updatePatientStatus(patient._id, 'complete')}
-                                    className="text-green-600 hover:text-green-800"
+                                    className="text-emerald-600 hover:text-emerald-800 px-2 py-1 rounded-lg hover:bg-emerald-50 transition-colors font-semibold"
                                   >
                                     Complete
                                   </button>
                                   <button
                                     onClick={() => updatePatientStatus(patient._id, 'cancelled')}
-                                    className="text-red-600 hover:text-red-800"
+                                    className="text-rose-600 hover:text-rose-800 px-2 py-1 rounded-lg hover:bg-rose-50 transition-colors font-semibold"
                                   >
                                     Cancel
                                   </button>
@@ -839,7 +913,7 @@ export default function Dashboard(): JSX.Element {
                               {patient.status === 'complete' && (
                                 <button
                                   onClick={() => updatePatientStatus(patient._id, 'pending')}
-                                  className="text-yellow-600 hover:text-yellow-800"
+                                  className="text-amber-600 hover:text-amber-800 px-2 py-1 rounded-lg hover:bg-amber-50 transition-colors font-semibold"
                                 >
                                   Revert
                                 </button>
@@ -847,7 +921,7 @@ export default function Dashboard(): JSX.Element {
                               {patient.status === 'cancelled' && (
                                 <button
                                   onClick={() => updatePatientStatus(patient._id, 'pending')}
-                                  className="text-yellow-600 hover:text-yellow-800"
+                                  className="text-amber-600 hover:text-amber-800 px-2 py-1 rounded-lg hover:bg-amber-50 transition-colors font-semibold"
                                 >
                                   Restore
                                 </button>
@@ -860,16 +934,16 @@ export default function Dashboard(): JSX.Element {
                   </table>
                   {patients.length === 0 && (
                     <div className="text-center py-12">
-                      <Users className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                      <p className="text-gray-500">No patients found for this session</p>
+                      <Users className="w-12 h-12 text-sky-300 mx-auto mb-4" />
+                      <p className="text-sky-500">No patients found for this session</p>
                     </div>
                   )}
                 </div>
               </div>
             ) : (
-              <div className="bg-white rounded-lg shadow p-12 text-center">
-                <Users className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-500">Please select a session to view patients</p>
+              <div className="bg-white rounded-2xl shadow-sm border border-sky-100 p-12 text-center">
+                <Users className="w-16 h-16 text-sky-300 mx-auto mb-4" />
+                <p className="text-sky-500 text-lg">Please select a session to view patients</p>
               </div>
             )}
           </div>
@@ -877,4 +951,5 @@ export default function Dashboard(): JSX.Element {
       </main>
     </div>
   );
+
 }
