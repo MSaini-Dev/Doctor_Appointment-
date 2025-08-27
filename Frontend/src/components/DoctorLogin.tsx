@@ -281,12 +281,13 @@ const DoctorLogin = () => {
         password: formData.password
       });
 
-      if (response.success) {
-        login(response.data.token, response.data.doctor);
+     if (response.success) {
+  login(response.token, response.doctor);
 
-        const from = location.state?.from?.pathname || '/dashboard';
-        navigate(from, { replace: true });
-      }
+  const from = location.state?.from?.pathname || '/dashboard';
+  navigate(from, { replace: true });
+}
+
     } catch (err: unknown) {
       console.error('Login error:', err);
       const errorMessage =

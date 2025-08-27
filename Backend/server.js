@@ -220,12 +220,20 @@ app.post('/sessions/:id/stop', async (req, res) => {
 // SMS-BASED PATIENT REGISTRATION
 app.post("/", async (req, res) => {
   try {
+    const number  = req.body.no;
+    const match = number.match(/\d{10}$/);
+
+if (match) {
+  const phone = match[0];
+  console.log(phone); // "9876543210"
+
     const smsData = {
-      from: req.body.no,      // sender number
+      from: match,      // sender number
       message: req.body.key,  // SMS text (should contain patient name)
       time: req.body.time     // SMS time
-    };
-    // Validate required fields
+    };} else {
+  return res.status(400).json({ error: 'Invalid phone number format. Must contain'})
+        }    // Validate required fields
     if (!smsData.from || !smsData.message) {
       return res.status(400).json({ 
         error: 'Phone number and message required',
