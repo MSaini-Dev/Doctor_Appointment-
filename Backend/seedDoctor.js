@@ -6,7 +6,7 @@ dotenv.config();
 
 const seedDoctor = async () => {
   try {
-    await mongoose.connect("mongodb://localhost:27017/clinicApp");
+    await mongoose.connect("mongodb+srv://msainidev:Qj1PhbeA6lxdbTXW@cluster0.25vchsq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0");
 
     console.log("✅ MongoDB connected...");
 
@@ -14,8 +14,8 @@ const seedDoctor = async () => {
     await Doctor.deleteMany();
 
     const doctor = new Doctor({
-      doctorId: "m.saini.dev@gmail.com",
-      name: "Dr. John Doe",
+      doctorId: "smith.doe",
+      name: "Dr. Smith Doe",
       passwordHash: "12345678", // plain, will be hashed by pre-save hook
     });
 
