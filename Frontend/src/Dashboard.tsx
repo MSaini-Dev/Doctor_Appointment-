@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Calendar, Clock, Users, Phone, Settings, Plus, Trash2, Play, Square, CheckCircle, AlertCircle, Home, CalendarDays, UserCheck } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Calendar, Clock, Users, Plus, Trash2, Play, Square, CheckCircle, AlertCircle, Home, CalendarDays, UserCheck } from 'lucide-react';
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState('overview');
@@ -13,7 +13,7 @@ export default function Dashboard() {
   const [holidayDate, setHolidayDate] = useState('');
   const [selectedWeeklyHoliday, setSelectedWeeklyHoliday] = useState('');
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(`null`);
   const [liveSummary, setLiveSummary] = useState(null);
 
   const weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -35,7 +35,7 @@ export default function Dashboard() {
 
   const fetchLiveSummary = async () => {
     try {
-      const res = await fetch('http://localhost:4000/sessions/live-summary');
+      const res = await fetch('https://doctor-appointment-bfjd.onrender.com/sessions/live-summary');
       const data = await res.json();
       setLiveSummary(data);
     } catch (error) {
@@ -45,7 +45,7 @@ export default function Dashboard() {
 
   const fetchSessions = async () => {
     try {
-      const res = await fetch('http://localhost:4000/sessions');
+      const res = await fetch('https://doctor-appointment-bfjd.onrender.com/sessions');
       const data = await res.json();
       setSessions(data);
       if (data.length > 0 && !selectedSession) {
@@ -59,7 +59,7 @@ export default function Dashboard() {
 
   const fetchSettings = async () => {
     try {
-      const res = await fetch('http://localhost:4000/settings');
+      const res = await fetch('https://doctor-appointment-bfjd.onrender.com/settings');
       const data = await res.json();
       setSettings(data);
       setHolidays(data.holidays || []);
@@ -72,7 +72,7 @@ export default function Dashboard() {
   const fetchPatients = async (sessionId) => {
     if (!sessionId) return setPatients([]);
     try {
-      const res = await fetch(`http://localhost:4000/patients?sessionId=${sessionId}`);
+      const res = await fetch(`https://doctor-appointment-bfjd.onrender.com/patients?sessionId=${sessionId}`);
       const data = await res.json();
       setPatients(data);
     } catch {
@@ -87,7 +87,7 @@ export default function Dashboard() {
 
   const createSession = async () => {
     try {
-      const res = await fetch('http://localhost:4000/sessions', {
+      const res = await fetch('https://doctor-appointment-bfjd.onrender.com/sessions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(sessionForm),
@@ -109,7 +109,7 @@ export default function Dashboard() {
     if (!confirm('Are you sure you want to delete this session? This will also delete all associated patient bookings.')) return;
     
     try {
-      const res = await fetch(`http://localhost:4000/sessions/${sessionId}`, {
+      const res = await fetch(`https://doctor-appointment-bfjd.onrender.com/sessions/${sessionId}`, {
         method: 'DELETE',
       });
       const data = await res.json();
@@ -128,7 +128,7 @@ export default function Dashboard() {
 
   const startSession = async (sessionId) => {
     try {
-      const res = await fetch(`http://localhost:4000/sessions/${sessionId}/start`, {
+      const res = await fetch(`https://doctor-appointment-bfjd.onrender.com/sessions/${sessionId}/start`, {
         method: 'POST',
       });
       const data = await res.json();
@@ -146,7 +146,7 @@ export default function Dashboard() {
 
   const stopSession = async (sessionId) => {
     try {
-      const res = await fetch(`http://localhost:4000/sessions/${sessionId}/stop`, {
+      const res = await fetch(`https://doctor-appointment-bfjd.onrender.com/sessions/${sessionId}/stop`, {
         method: 'POST',
       });
       const data = await res.json();
@@ -162,7 +162,7 @@ export default function Dashboard() {
 
   const updatePatientStatus = async (patientId, status) => {
     try {
-      const res = await fetch(`http://localhost:4000/patients/${patientId}/status`, {
+      const res = await fetch(`https://doctor-appointment-bfjd.onrender.com/patients/${patientId}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status }),
@@ -183,7 +183,7 @@ export default function Dashboard() {
       return;
     }
     try {
-      const res = await fetch('http://localhost:4000/holidays', {
+      const res = await fetch('https://doctor-appointment-bfjd.onrender.com/holidays', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ date: holidayDate }),
@@ -204,7 +204,7 @@ export default function Dashboard() {
 
   const deleteHoliday = async (date) => {
     try {
-      await fetch(`http://localhost:4000/holidays/${date}`, { method: 'DELETE' });
+      await fetch(`https://doctor-appointment-bfjd.onrender.com/holidays/${date}`, { method: 'DELETE' });
       fetchSettings();
       fetchSessions();
     } catch {
@@ -218,7 +218,7 @@ export default function Dashboard() {
       return;
     }
     try {
-      const res = await fetch('http://localhost:4000/weekly-holidays', {
+      const res = await fetch('https://doctor-appointment-bfjd.onrender.com/weekly-holidays', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ day: selectedWeeklyHoliday }),
@@ -239,7 +239,7 @@ export default function Dashboard() {
 
   const deleteWeeklyHoliday = async (day) => {
     try {
-      await fetch(`http://localhost:4000/weekly-holidays/${day}`, { method: 'DELETE' });
+      await fetch(`https://doctor-appointment-bfjd.onrender.com/weekly-holidays/${day}`, { method: 'DELETE' });
       fetchSettings();
       fetchSessions();
     } catch {

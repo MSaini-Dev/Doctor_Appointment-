@@ -1,449 +1,3 @@
-// import React, { useEffect, useState } from 'react';
-// import { Calendar, Clock, Users, Phone, User, MapPin, Award, Stethoscope, CheckCircle, AlertCircle, Moon, Sun } from 'lucide-react';
-// import { Button } from '@/components/ui/button';
-// import { Input } from '@/components/ui/input';
-// import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-// import { Badge } from '@/components/ui/badge';
-// import { Alert, AlertDescription } from '@/components/ui/alert';
-
-// export default function DoctorPortfolio() {
-//   const [sessions, setSessions] = useState([]);
-//   const [selectedSessionId, setSelectedSessionId] = useState('');
-//   const [selectedSession, setSelectedSession] = useState(null);
-//   const [loading, setLoading] = useState(true);
-//   const [form, setForm] = useState({ name: '', phone: '' });
-//   const [token, setToken] = useState(null);
-//   const [error, setError] = useState(null);
-//   const [submitting, setSubmitting] = useState(false);
-//   const [liveSummary, setLiveSummary] = useState(null);
-//   const [darkMode, setDarkMode] = useState(false);
-
-//   // Apply theme to document
-//   useEffect(() => {
-//     if (darkMode) {
-//       document.documentElement.classList.add('dark');
-//     } else {
-//       document.documentElement.classList.remove('dark');
-//     }
-//   }, [darkMode]);
-
-//   useEffect(() => {
-//     async function fetchLiveSummary() {
-//       try {
-//         const res = await fetch('http://localhost:4000/sessions/live-summary');
-//         const data = await res.json();
-//         setLiveSummary(data);
-//       } catch {
-//         // Handle error silently
-//       }
-//     }
-//     fetchLiveSummary();
-//     const interval = setInterval(fetchLiveSummary, 60000);
-//     return () => clearInterval(interval);
-//   }, []);
-
-//   useEffect(() => {
-//     async function fetchSessions() {
-//       try {
-//         const res = await fetch('http://localhost:4000/sessions');
-//         const data = await res.json();
-//         setSessions(data);
-//         if (data.length > 0) {
-//           setSelectedSessionId(data[0]._id);
-//           setSelectedSession(data[0]);
-//         }
-//       } catch {
-//         setError('Failed to load sessions');
-//       }
-//       setLoading(false);
-//     }
-//     fetchSessions();
-//   }, []);
-
-//   useEffect(() => {
-//     const session = sessions.find(s => s._id === selectedSessionId);
-//     setSelectedSession(session || null);
-//   }, [selectedSessionId, sessions]);
-
-//   const handleInputChange = (e) => {
-//     const { name, value } = e.target;
-//     setForm(prev => ({ ...prev, [name]: value }));
-//     setError(null);
-//     setToken(null);
-//   };
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     if (!selectedSession) {
-//       setError('Please select a session first.');
-//       return;
-//     }
-//     if (!form.name.trim() || !form.phone.trim()) {
-//       setError('Please fill all fields');
-//       return;
-//     }
-//     setSubmitting(true);
-//     setError(null);
-//     try {
-//       const res = await fetch('http://localhost:4000/patient', {
-//         method: 'POST',
-//         headers: {
-//           'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify({
-//           name: form.name.trim(),
-//           phone: form.phone.trim(),
-//           sessionId: selectedSession._id,
-//         }),
-//       });
-//       const data = await res.json();
-//       setToken(data.tokenNo);
-//       setForm({ name: '', phone: '' });
-
-//       // Refresh sessions
-//       const sessionsRes = await fetch('http://localhost:4000/sessions');
-//       const sessionsData = await sessionsRes.json();
-//       setSessions(sessionsData);
-//       const updatedSession = sessionsData.find(s => s._id === selectedSessionId);
-//       setSelectedSession(updatedSession || null);
-//     } catch {
-//       setError('Failed to register for session');
-//     }
-//     setSubmitting(false);
-//   };
-
-//   // Group sessions by date
-//   const sessionsByDate = sessions.reduce((acc, session) => {
-//     const date = session.date;
-//     if (!acc[date]) {
-//       acc[date] = [];
-//     }
-//     acc[date].push(session);
-//     return acc;
-//   }, {});
-
-//   if (loading) {
-//     return (
-//       <div className={`min-h-screen flex items-center justify-center ${darkMode ? 'dark bg-gray-900' : 'bg-gray-50'}`}>
-//         <div className="text-center">
-//           <div className={`animate-spin rounded-full h-12 w-12 border-b-2 mx-auto mb-4 ${darkMode ? 'border-blue-400' : 'border-blue-600'}`}></div>
-//           <p className={darkMode ? 'text-gray-300' : 'text-gray-600'}>Loading sessions...</p>
-//         </div>
-//       </div>
-//     );
-//   }
-
-//   return (
-//     <div className={`min-h-screen transition-colors duration-300 ${darkMode ? 'dark bg-gray-900' : 'bg-gray-50'}`}>
-//       {/* Navigation */}
-//       <nav className={`shadow-sm border-b transition-colors duration-300 ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
-//         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-//           <div className="flex justify-between items-center h-16">
-//             <div className="flex items-center space-x-3">
-//               <div className="flex-shrink-0">
-//                 <Stethoscope className={`h-8 w-8 ${darkMode ? 'text-blue-400' : 'text-blue-600'}`} />
-//               </div>
-//               <div>
-//                 <h1 className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>Dr. Sarah Johnson</h1>
-//                 <p className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>Internal Medicine Specialist</p>
-//               </div>
-//             </div>
-//             <div className="flex items-center space-x-4">
-//               {liveSummary && liveSummary.liveSession ? (
-//                 <Badge variant="secondary" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
-//                   <CheckCircle className="h-3 w-3 mr-1" />
-//                   Available
-//                 </Badge>
-//               ) : (
-//                 <Badge variant="outline" className={`${darkMode ? 'text-gray-300 border-gray-600' : 'text-gray-600 border-gray-300'}`}>
-//                   <AlertCircle className="h-3 w-3 mr-1" />
-//                   Offline
-//                 </Badge>
-//               )}
-//               <Button
-//                 variant="ghost"
-//                 size="sm"
-//                 onClick={() => setDarkMode(!darkMode)}
-//                 className={`p-2 ${darkMode ? 'text-gray-300 hover:text-white hover:bg-gray-700' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'}`}
-//               >
-//                 {darkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-//               </Button>
-//             </div>
-//           </div>
-//         </div>
-//       </nav>
-
-//       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-//         {/* Hero Section */}
-//         <section className="mb-12">
-//           <div className={`rounded-xl shadow-sm overflow-hidden transition-colors duration-300 ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
-//             <div className="md:flex">
-//               <div className="md:w-1/3">
-//                 <img 
-//                   src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=500&fit=crop&crop=face" 
-//                   alt="Dr. Sarah Johnson"
-//                   className="w-full h-64 md:h-full object-cover"
-//                 />
-//               </div>
-//               <div className="md:w-2/3 p-6 md:p-8">
-//                 <h2 className={`text-3xl font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Welcome to My Practice</h2>
-//                 <p className={`mb-6 leading-relaxed ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-//                   With over 15 years of experience in internal medicine, I am dedicated to providing 
-//                   comprehensive healthcare services. I specialize in preventive care, chronic disease 
-//                   management, and wellness optimization for patients of all ages.
-//                 </p>
-                
-//                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-//                   <div className="flex items-center space-x-2">
-//                     <Award className={`h-5 w-5 ${darkMode ? 'text-blue-400' : 'text-blue-600'}`} />
-//                     <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>Board Certified Internal Medicine</span>
-//                   </div>
-//                   <div className="flex items-center space-x-2">
-//                     <MapPin className={`h-5 w-5 ${darkMode ? 'text-blue-400' : 'text-blue-600'}`} />
-//                     <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>Downtown Medical Center</span>
-//                   </div>
-//                   <div className="flex items-center space-x-2">
-//                     <Users className={`h-5 w-5 ${darkMode ? 'text-blue-400' : 'text-blue-600'}`} />
-//                     <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>15+ Years Experience</span>
-//                   </div>
-//                   <div className="flex items-center space-x-2">
-//                     <Phone className={`h-5 w-5 ${darkMode ? 'text-blue-400' : 'text-blue-600'}`} />
-//                     <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>(555) 123-4567</span>
-//                   </div>
-//                 </div>
-
-//                 <Button 
-//                   onClick={() => document.getElementById('booking-section').scrollIntoView({ behavior: 'smooth' })}
-//                   className={`transition-colors duration-300 ${darkMode ? 'bg-blue-500 hover:bg-blue-600 text-white' : 'bg-blue-600 hover:bg-blue-700 text-white'}`}
-//                 >
-//                   Book Appointment
-//                 </Button>
-//               </div>
-//             </div>
-//           </div>
-//         </section>
-
-//         {/* Live Status */}
-//         {liveSummary && liveSummary.liveSession && (
-//           <section className="mb-8">
-//             <Alert className={`transition-colors duration-300 ${darkMode ? 'border-green-800 bg-green-900/20' : 'border-green-200 bg-green-50'}`}>
-//               <CheckCircle className="h-4 w-4 text-green-600" />
-//               <AlertDescription className={darkMode ? 'text-green-300' : 'text-green-800'}>
-//                 <strong>Live Session Active:</strong> {liveSummary.liveSession.date} 
-//                 ({liveSummary.liveSession.checkin} - {liveSummary.liveSession.checkout}) • 
-//                 Patients Completed: {liveSummary.completedPatients}
-//               </AlertDescription>
-//             </Alert>
-//           </section>
-//         )}
-
-//         {/* Booking Section */}
-//         <section id="booking-section" className="mb-12">
-//           <Card className={`max-w-md mx-auto transition-colors duration-300 ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
-//             <CardHeader>
-//               <CardTitle className={`flex items-center space-x-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-//                 <Calendar className="h-5 w-5" />
-//                 <span>Book Your Appointment</span>
-//               </CardTitle>
-//               <CardDescription className={darkMode ? 'text-gray-300' : 'text-gray-600'}>
-//                 Select a session and register for your appointment
-//               </CardDescription>
-//             </CardHeader>
-//             <CardContent className="space-y-4">
-//               <div>
-//                 <label className={`text-sm font-medium mb-2 block ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-//                   Select Session
-//                 </label>
-//                 <select
-//                   value={selectedSessionId}
-//                   onChange={(e) => setSelectedSessionId(e.target.value)}
-//                   className={`w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300 ${
-//                     darkMode 
-//                       ? 'bg-gray-700 border-gray-600 text-white' 
-//                       : 'bg-white border-gray-300 text-gray-900'
-//                   }`}
-//                 >
-//                   {sessions.map(session => (
-//                     <option key={session._id} value={session._id}>
-//                       {session.date} ({session.checkin} - {session.checkout})
-//                     </option>
-//                   ))}
-//                 </select>
-//               </div>
-
-//               {selectedSession && (
-//                 <div className={`p-3 rounded-md transition-colors duration-300 ${darkMode ? 'bg-gray-700' : 'bg-gray-50'}`}>
-//                   <div className="flex justify-between items-center mb-2">
-//                     <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>Available Tokens:</span>
-//                     <Badge variant="outline" className={darkMode ? 'border-gray-500 text-gray-300' : ''}>
-//                       {selectedSession.totalTokens - selectedSession.currentToken}
-//                     </Badge>
-//                   </div>
-//                   <div className="flex justify-between items-center">
-//                     <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>Status:</span>
-//                     <Badge variant={selectedSession.isActive ? "default" : "secondary"}>
-//                       {selectedSession.isActive ? 'Active' : 'Inactive'}
-//                     </Badge>
-//                   </div>
-//                   {selectedSession.totalTokens - selectedSession.currentToken <= 0 && (
-//                     <p className="text-red-500 text-sm mt-2">No tokens available for this session</p>
-//                   )}
-//                 </div>
-//               )}
-
-//               <div onSubmit={handleSubmit} className="space-y-4">
-//                 <div>
-//                   <Input
-//                     type="text"
-//                     name="name"
-//                     placeholder="Your Full Name"
-//                     value={form.name}
-//                     onChange={handleInputChange}
-//                     required
-//                     disabled={submitting}
-//                     className={`transition-colors duration-300 ${
-//                       darkMode 
-//                         ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
-//                         : 'bg-white border-gray-300 text-gray-900'
-//                     }`}
-//                   />
-//                 </div>
-//                 <div>
-//                   <Input
-//                     type="tel"
-//                     name="phone"
-//                     placeholder="Phone Number"
-//                     value={form.phone}
-//                     onChange={handleInputChange}
-//                     required
-//                     disabled={submitting}
-//                     className={`transition-colors duration-300 ${
-//                       darkMode 
-//                         ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
-//                         : 'bg-white border-gray-300 text-gray-900'
-//                     }`}
-//                   />
-//                 </div>
-//                 <Button
-//                   onClick={handleSubmit}
-//                   disabled={submitting || (selectedSession && (selectedSession.totalTokens - selectedSession.currentToken <= 0))}
-//                   className={`w-full transition-colors duration-300 ${
-//                     darkMode 
-//                       ? 'bg-blue-500 hover:bg-blue-600 text-white' 
-//                       : 'bg-blue-600 hover:bg-blue-700 text-white'
-//                   }`}
-//                 >
-//                   {submitting ? 'Booking...' : 'Book Appointment'}
-//                 </Button>
-//               </div>
-
-//               {error && (
-//                 <Alert variant="destructive" className={darkMode ? 'bg-red-900/20 border-red-800' : ''}>
-//                   <AlertCircle className="h-4 w-4" />
-//                   <AlertDescription className={darkMode ? 'text-red-300' : ''}>{error}</AlertDescription>
-//                 </Alert>
-//               )}
-
-//               {token && (
-//                 <Alert className={`transition-colors duration-300 ${darkMode ? 'border-green-800 bg-green-900/20' : 'border-green-200 bg-green-50'}`}>
-//                   <CheckCircle className="h-4 w-4 text-green-600" />
-//                   <AlertDescription className={darkMode ? 'text-green-300' : 'text-green-800'}>
-//                     <strong>Booking Confirmed!</strong> Your token number is: <strong>{token}</strong>
-//                   </AlertDescription>
-//                 </Alert>
-//               )}
-//             </CardContent>
-//           </Card>
-//         </section>
-
-//         {/* Sessions by Date */}
-//         <section>
-//           <h2 className={`text-2xl font-bold mb-6 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Available Sessions</h2>
-//           <div className="space-y-6">
-//             {Object.entries(sessionsByDate).map(([date, dateSessions]) => (
-//               <Card key={date} className={`transition-colors duration-300 ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
-//                 <CardHeader>
-//                   <CardTitle className={`flex items-center space-x-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-//                     <Calendar className="h-5 w-5" />
-//                     <span>{date}</span>
-//                   </CardTitle>
-//                 </CardHeader>
-//                 <CardContent>
-//                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-//                     {dateSessions.map(session => (
-//                       <div key={session._id} className={`border rounded-lg p-4 hover:shadow-md transition-all duration-300 ${
-//                         darkMode 
-//                           ? 'border-gray-600 hover:border-gray-500 hover:bg-gray-700' 
-//                           : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-//                       }`}>
-//                         <div className="flex items-center justify-between mb-3">
-//                           <div className="flex items-center space-x-2">
-//                             <Clock className={`h-4 w-4 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`} />
-//                             <span className={`text-sm font-medium ${darkMode ? 'text-gray-200' : 'text-gray-900'}`}>
-//                               {session.checkin} - {session.checkout}
-//                             </span>
-//                           </div>
-//                           <Badge variant={session.isActive ? "default" : "secondary"}>
-//                             {session.isActive ? 'Live' : 'Scheduled'}
-//                           </Badge>
-//                         </div>
-                        
-//                         <div className="space-y-2">
-//                           <div className="flex justify-between text-sm">
-//                             <span className={darkMode ? 'text-gray-400' : 'text-gray-600'}>Available:</span>
-//                             <span className={`font-medium ${darkMode ? 'text-gray-200' : 'text-gray-900'}`}>
-//                               {session.totalTokens - session.currentToken}/{session.totalTokens}
-//                             </span>
-//                           </div>
-//                           <div className={`w-full rounded-full h-2 ${darkMode ? 'bg-gray-600' : 'bg-gray-200'}`}>
-//                             <div 
-//                               className={`h-2 rounded-full transition-all duration-300 ${darkMode ? 'bg-blue-400' : 'bg-blue-600'}`}
-//                               style={{ 
-//                                 width: `${((session.totalTokens - session.currentToken) / session.totalTokens) * 100}%` 
-//                               }}
-//                             ></div>
-//                           </div>
-//                           <Button
-//                             variant="outline"
-//                             size="sm"
-//                             className={`w-full mt-3 transition-colors duration-300 ${
-//                               darkMode 
-//                                 ? 'border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white' 
-//                                 : 'border-gray-300 text-gray-700 hover:bg-gray-50'
-//                             }`}
-//                             disabled={session.totalTokens - session.currentToken <= 0}
-//                             onClick={() => {
-//                               setSelectedSessionId(session._id);
-//                               document.getElementById('booking-section').scrollIntoView({ behavior: 'smooth' });
-//                             }}
-//                           >
-//                             {session.totalTokens - session.currentToken <= 0 ? 'Full' : 'Select Session'}
-//                           </Button>
-//                         </div>
-//                       </div>
-//                     ))}
-//                   </div>
-//                 </CardContent>
-//               </Card>
-//             ))}
-//           </div>
-          
-//           {Object.keys(sessionsByDate).length === 0 && (
-//             <Card className={`transition-colors duration-300 ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
-//               <CardContent className="text-center py-8">
-//                 <Calendar className={`h-12 w-12 mx-auto mb-4 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`} />
-//                 <p className={darkMode ? 'text-gray-300' : 'text-gray-600'}>No sessions available at the moment.</p>
-//                 <p className={`text-sm mt-1 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Please check back later or contact us directly.</p>
-//               </CardContent>
-//             </Card>
-//           )}
-//         </section>
-//       </div>
-//     </div>
-//   );
-// }
-
-
 import React, { useEffect, useState } from 'react';
 import { Calendar, Clock, Users, Phone, User, MapPin, Award, Stethoscope, CheckCircle, AlertCircle, Moon, Sun, Star, Shield, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -452,18 +6,39 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
+interface Session {
+  _id: string;
+  date: string;
+  checkin: string;
+  checkout: string;
+  totalTokens: number;
+  currentToken: number;
+  isActive: boolean;
+}
+
+interface PatientForm {
+  name: string;
+  phone: string;
+}
+
+interface LiveSummary {
+  liveSession?: Session;
+  completedPatients?: number;
+  isTodayHoliday?: boolean;
+}
+
 export default function DoctorPortfolio() {
-  const [sessions, setSessions] = useState([]);
-  const [selectedSessionId, setSelectedSessionId] = useState('');
-  const [selectedSession, setSelectedSession] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [form, setForm] = useState({ name: '', phone: '' });
-  const [token, setToken] = useState(null);
-  const [error, setError] = useState(null);
-  const [submitting, setSubmitting] = useState(false);
-  const [liveSummary, setLiveSummary] = useState(null);
-  const [darkMode, setDarkMode] = useState(false);
-  const [phoneError, setPhoneError] = useState('');
+  const [sessions, setSessions] = useState<Session[]>([]);
+  const [selectedSessionId, setSelectedSessionId] = useState<string>('');
+  const [selectedSession, setSelectedSession] = useState<Session | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [form, setForm] = useState<PatientForm>({ name: '', phone: '' });
+  const [token, setToken] = useState<number | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState<boolean>(false);
+  const [liveSummary, setLiveSummary] = useState<LiveSummary | null>(null);
+  const [darkMode, setDarkMode] = useState<boolean>(false);
+  const [phoneError, setPhoneError] = useState<string>('');
 
   // Apply theme to document
   useEffect(() => {
@@ -477,8 +52,8 @@ export default function DoctorPortfolio() {
   useEffect(() => {
     async function fetchLiveSummary() {
       try {
-        const res = await fetch('http://localhost:4000/sessions/live-summary');
-        const data = await res.json();
+        const res = await fetch('https://doctor-appointment-bfjd.onrender.com/sessions/live-summary');
+        const data: LiveSummary = await res.json();
         setLiveSummary(data);
       } catch {
         // Handle error silently
@@ -492,8 +67,8 @@ export default function DoctorPortfolio() {
   useEffect(() => {
     async function fetchSessions() {
       try {
-        const res = await fetch('http://localhost:4000/sessions');
-        const data = await res.json();
+        const res = await fetch('https://doctor-appointment-bfjd.onrender.com/sessions');
+        const data: Session[] = await res.json();
         setSessions(data);
         if (data.length > 0) {
           setSelectedSessionId(data[0]._id);
@@ -512,7 +87,7 @@ export default function DoctorPortfolio() {
     setSelectedSession(session || null);
   }, [selectedSessionId, sessions]);
 
-  const validatePhoneNumber = (phone) => {
+  const validatePhoneNumber = (phone: string): boolean => {
     const phoneRegex = /^\d{10}$/;
     if (!phone) {
       setPhoneError('Phone number is required');
@@ -526,7 +101,7 @@ export default function DoctorPortfolio() {
     return true;
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     
     if (name === 'phone') {
@@ -547,7 +122,7 @@ export default function DoctorPortfolio() {
     setToken(null);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!selectedSession) {
@@ -567,7 +142,7 @@ export default function DoctorPortfolio() {
     setError(null);
     
     try {
-      const res = await fetch('http://localhost:4000/patient', {
+      const res = await fetch('https://doctor-appointment-bfjd.onrender.com/patient', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -588,8 +163,8 @@ export default function DoctorPortfolio() {
         setForm({ name: '', phone: '' });
         setPhoneError('');
         // Refresh sessions to get updated token counts
-        const sessionsRes = await fetch('http://localhost:4000/sessions');
-        const sessionsData = await sessionsRes.json();
+        const sessionsRes = await fetch('https://doctor-appointment-bfjd.onrender.com/sessions');
+        const sessionsData: Session[] = await sessionsRes.json();
         setSessions(sessionsData);
         const updatedSession = sessionsData.find(s => s._id === selectedSessionId);
         setSelectedSession(updatedSession || null);
@@ -602,7 +177,7 @@ export default function DoctorPortfolio() {
   };
 
   // Group sessions by date
-  const sessionsByDate = sessions.reduce((acc, session) => {
+  const sessionsByDate = sessions.reduce((acc: Record<string, Session[]>, session) => {
     const date = session.date;
     if (!acc[date]) {
       acc[date] = [];
@@ -894,7 +469,7 @@ export default function DoctorPortfolio() {
                     
                     <Button 
                       type="submit" 
-                      disabled={submitting || !form.name || !form.phone || phoneError}
+                      disabled={submitting || !form.name || !form.phone || !!phoneError}
                       className={`w-full ${darkMode ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-600 hover:bg-blue-700'}`}
                     >
                       {submitting ? 'Booking...' : 'Book Appointment'}
