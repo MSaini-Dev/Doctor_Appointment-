@@ -39,7 +39,7 @@ export default function DoctorPortfolio() {
   const [liveSummary, setLiveSummary] = useState<LiveSummary | null>(null);
   const [darkMode, setDarkMode] = useState<boolean>(false);
   const [phoneError, setPhoneError] = useState<string>('');
-
+  const backend = import.meta.env.VITE_API_BACKEND 
   // Apply theme to document
   useEffect(() => {
     if (darkMode) {
@@ -52,7 +52,7 @@ export default function DoctorPortfolio() {
   useEffect(() => {
     async function fetchLiveSummary() {
       try {
-        const res = await fetch('https://doctor-appointment-bfjd.onrender.com/sessions/live-summary');
+        const res = await fetch(backend + '/sessions/live-summary');
         const data: LiveSummary = await res.json();
         setLiveSummary(data);
       } catch {
@@ -67,7 +67,7 @@ export default function DoctorPortfolio() {
   useEffect(() => {
     async function fetchSessions() {
       try {
-        const res = await fetch('https://doctor-appointment-bfjd.onrender.com/sessions');
+        const res = await fetch(backend + '/sessions');
         const data: Session[] = await res.json();
         setSessions(data);
         if (data.length > 0) {
@@ -142,7 +142,7 @@ export default function DoctorPortfolio() {
     setError(null);
     
     try {
-      const res = await fetch('https://doctor-appointment-bfjd.onrender.com/patient', {
+      const res = await fetch(backend + '/patient', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -163,7 +163,7 @@ export default function DoctorPortfolio() {
         setForm({ name: '', phone: '' });
         setPhoneError('');
         // Refresh sessions to get updated token counts
-        const sessionsRes = await fetch('https://doctor-appointment-bfjd.onrender.com/sessions');
+        const sessionsRes = await fetch(backend + '/sessions');
         const sessionsData: Session[] = await sessionsRes.json();
         setSessions(sessionsData);
         const updatedSession = sessionsData.find(s => s._id === selectedSessionId);

@@ -217,20 +217,6 @@ app.post('/sessions/:id/stop', async (req, res) => {
   }
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // SMS-BASED PATIENT REGISTRATION
 app.post("/", async (req, res) => {
   try {
@@ -239,7 +225,6 @@ app.post("/", async (req, res) => {
       message: req.body.key,  // SMS text (should contain patient name)
       time: req.body.time     // SMS time
     };
-
     // Validate required fields
     if (!smsData.from || !smsData.message) {
       return res.status(400).json({ 
@@ -273,8 +258,7 @@ app.post("/", async (req, res) => {
     
     // Find today's active session
     const session = await Session.findOne({ 
-      date: today, 
-      isActive: true 
+      date: today,
     });
 
     if (!session) {
