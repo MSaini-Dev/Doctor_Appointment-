@@ -401,10 +401,10 @@ const DoctorLogin = () => {
               </h4>
               <div className="text-sm text-blue-700 space-y-1">
                 <p>
-                  <strong>Doctor ID:</strong> doctor001
+                  <strong>Doctor ID:</strong> smith.doe
                 </p>
                 <p>
-                  <strong>Password:</strong> SecurePassword123!
+                  <strong>Password:</strong> 12345678
                 </p>
               </div>
               <p className="text-xs text-blue-600 mt-2">
