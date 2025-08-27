@@ -100,6 +100,7 @@ import axios from 'axios';
 
 const API_BASE = import.meta.env.VITE_API_BACKEND 
 
+console.log("API_BASE =", API_BASE);
 export const apiService = {
   getClinicSettings: async (params: Record<string, unknown>) => {
     const res = await axios.get(`${API_BASE}/clinic/settings`, { params });
