@@ -1,31 +1,31 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Calendar, Clock, Users, Plus, Trash2, Play, Square, CheckCircle, AlertCircle, Home, CalendarDays, UserCheck } from 'lucide-react';
 
-export default function Dashboard() {
-  const [activeTab, setActiveTab] = useState('overview');
-  const [patients, setPatients] = useState([]);
-  const [sessions, setSessions] = useState([]);
-  const [selectedSession, setSelectedSession] = useState(null);
-  const [sessionForm, setSessionForm] = useState({ date: '', checkin: '09:00', checkout: '17:00', totalTokens: 10 });
-  const [settings, setSettings] = useState(null);
-  const [holidays, setHolidays] = useState([]);
-  const [weeklyHolidays, setWeeklyHolidays] = useState([]);
-  const [holidayDate, setHolidayDate] = useState('');
-  const [selectedWeeklyHoliday, setSelectedWeeklyHoliday] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(`null`);
-  const [liveSummary, setLiveSummary] = useState(null);
+export default function Dashboard(): JSX.Element {
+  const [activeTab, setActiveTab] = useState<string>('overview');
+  const [patients, setPatients] = useState<Array<any>>([]);
+  const [sessions, setSessions] = useState<Array<any>>([]);
+  const [selectedSession, setSelectedSession] = useState<any | null>(null);
+  const [sessionForm, setSessionForm] = useState<{ date: string; checkin: string; checkout: string; totalTokens: number }>({ date: '', checkin: '09:00', checkout: '17:00', totalTokens: 10 });
+  const [settings, setSettings] = useState<any | null>(null);
+  const [holidays, setHolidays] = useState<Array<string>>([]);
+  const [weeklyHolidays, setWeeklyHolidays] = useState<Array<string>>([]);
+  const [holidayDate, setHolidayDate] = useState<string>('');
+  const [selectedWeeklyHoliday, setSelectedWeeklyHoliday] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [liveSummary, setLiveSummary] = useState<any | null>(null);
 
   const weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
   useEffect(() => {
     fetchInitialData();
     fetchLiveSummary();
-    const interval = setInterval(fetchLiveSummary, 30000); // Update every 30 seconds
+    const interval = setInterval(fetchLiveSummary, 30000);
     return () => clearInterval(interval);
   }, []);
 
-  const fetchInitialData = async () => {
+  const fetchInitialData = async (): Promise<void> => {
     await Promise.all([
       fetchSessions(),
       fetchSettings()
@@ -33,7 +33,7 @@ export default function Dashboard() {
     setLoading(false);
   };
 
-  const fetchLiveSummary = async () => {
+  const fetchLiveSummary = async (): Promise<void> => {
     try {
       const res = await fetch('https://doctor-appointment-bfjd.onrender.com/sessions/live-summary');
       const data = await res.json();
@@ -43,7 +43,7 @@ export default function Dashboard() {
     }
   };
 
-  const fetchSessions = async () => {
+  const fetchSessions = async (): Promise<void> => {
     try {
       const res = await fetch('https://doctor-appointment-bfjd.onrender.com/sessions');
       const data = await res.json();
@@ -57,7 +57,7 @@ export default function Dashboard() {
     }
   };
 
-  const fetchSettings = async () => {
+  const fetchSettings = async (): Promise<void> => {
     try {
       const res = await fetch('https://doctor-appointment-bfjd.onrender.com/settings');
       const data = await res.json();
@@ -69,7 +69,7 @@ export default function Dashboard() {
     }
   };
 
-  const fetchPatients = async (sessionId) => {
+  const fetchPatients = async (sessionId: string): Promise<void> => {
     if (!sessionId) return setPatients([]);
     try {
       const res = await fetch(`https://doctor-appointment-bfjd.onrender.com/patients?sessionId=${sessionId}`);
@@ -80,12 +80,12 @@ export default function Dashboard() {
     }
   };
 
-  const handleSessionSelect = (session) => {
+  const handleSessionSelect = (session: any): void => {
     setSelectedSession(session);
     fetchPatients(session._id);
   };
 
-  const createSession = async () => {
+  const createSession = async (): Promise<void> => {
     try {
       const res = await fetch('https://doctor-appointment-bfjd.onrender.com/sessions', {
         method: 'POST',
@@ -105,7 +105,7 @@ export default function Dashboard() {
     }
   };
 
-  const deleteSession = async (sessionId) => {
+  const deleteSession = async (sessionId: string): Promise<void> => {
     if (!confirm('Are you sure you want to delete this session? This will also delete all associated patient bookings.')) return;
     
     try {
@@ -126,7 +126,7 @@ export default function Dashboard() {
     }
   };
 
-  const startSession = async (sessionId) => {
+  const startSession = async (sessionId: string): Promise<void> => {
     try {
       const res = await fetch(`https://doctor-appointment-bfjd.onrender.com/sessions/${sessionId}/start`, {
         method: 'POST',
@@ -144,7 +144,7 @@ export default function Dashboard() {
     }
   };
 
-  const stopSession = async (sessionId) => {
+  const stopSession = async (sessionId: string): Promise<void> => {
     try {
       const res = await fetch(`https://doctor-appointment-bfjd.onrender.com/sessions/${sessionId}/stop`, {
         method: 'POST',
@@ -160,7 +160,7 @@ export default function Dashboard() {
     }
   };
 
-  const updatePatientStatus = async (patientId, status) => {
+  const updatePatientStatus = async (patientId: string, status: string): Promise<void> => {
     try {
       const res = await fetch(`https://doctor-appointment-bfjd.onrender.com/patients/${patientId}/status`, {
         method: 'PATCH',
@@ -177,7 +177,7 @@ export default function Dashboard() {
     }
   };
 
-  const addHoliday = async () => {
+  const addHoliday = async (): Promise<void> => {
     if (!holidayDate) {
       alert('Please select a date');
       return;
@@ -202,7 +202,7 @@ export default function Dashboard() {
     }
   };
 
-  const deleteHoliday = async (date) => {
+  const deleteHoliday = async (date: string): Promise<void> => {
     try {
       await fetch(`https://doctor-appointment-bfjd.onrender.com/holidays/${date}`, { method: 'DELETE' });
       fetchSettings();
@@ -212,7 +212,7 @@ export default function Dashboard() {
     }
   };
 
-  const addWeeklyHoliday = async () => {
+  const addWeeklyHoliday = async (): Promise<void> => {
     if (!selectedWeeklyHoliday) {
       alert('Please select a day');
       return;
@@ -237,7 +237,7 @@ export default function Dashboard() {
     }
   };
 
-  const deleteWeeklyHoliday = async (day) => {
+  const deleteWeeklyHoliday = async (day: string): Promise<void> => {
     try {
       await fetch(`https://doctor-appointment-bfjd.onrender.com/weekly-holidays/${day}`, { method: 'DELETE' });
       fetchSettings();
@@ -247,7 +247,7 @@ export default function Dashboard() {
     }
   };
 
-  const getStatusColor = (status) => {
+  const getStatusColor = (status: string): string => {
     switch (status) {
       case 'pending': return 'text-yellow-600 bg-yellow-100';
       case 'complete': return 'text-green-600 bg-green-100';
@@ -569,7 +569,7 @@ export default function Dashboard() {
             <h2 className="text-2xl font-bold text-gray-800">Create New Session</h2>
             
             <div className="bg-white rounded-lg shadow p-6 max-w-md">
-              <form onSubmit={(e) => { e.preventDefault(); createSession(); }} className="space-y-4">
+              <form onSubmit={(e: React.FormEvent) => { e.preventDefault(); createSession(); }} className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Session Date
@@ -577,7 +577,7 @@ export default function Dashboard() {
                   <input
                     type="date"
                     value={sessionForm.date}
-                    onChange={(e) => setSessionForm(prev => ({ ...prev, date: e.target.value }))}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSessionForm(prev => ({ ...prev, date: e.target.value }))}
                     required
                     min={new Date().toISOString().split('T')[0]}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -592,7 +592,7 @@ export default function Dashboard() {
                     <input
                       type="time"
                       value={sessionForm.checkin}
-                      onChange={(e) => setSessionForm(prev => ({ ...prev, checkin: e.target.value }))}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSessionForm(prev => ({ ...prev, checkin: e.target.value }))}
                       required
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     />
@@ -605,7 +605,7 @@ export default function Dashboard() {
                     <input
                       type="time"
                       value={sessionForm.checkout}
-                      onChange={(e) => setSessionForm(prev => ({ ...prev, checkout: e.target.value }))}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSessionForm(prev => ({ ...prev, checkout: e.target.value }))}
                       required
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     />
@@ -621,7 +621,7 @@ export default function Dashboard() {
                     min="1"
                     max="100"
                     value={sessionForm.totalTokens}
-                    onChange={(e) => setSessionForm(prev => ({ ...prev, totalTokens: parseInt(e.target.value) }))}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSessionForm(prev => ({ ...prev, totalTokens: parseInt(e.target.value) }))}
                     required
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   />
@@ -652,7 +652,7 @@ export default function Dashboard() {
                   <input
                     type="date"
                     value={holidayDate}
-                    onChange={(e) => setHolidayDate(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setHolidayDate(e.target.value)}
                     className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   />
                   <button
@@ -688,7 +688,7 @@ export default function Dashboard() {
                 <div className="flex space-x-3 mb-4">
                   <select
                     value={selectedWeeklyHoliday}
-                    onChange={(e) => setSelectedWeeklyHoliday(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSelectedWeeklyHoliday(e.target.value)}
                     className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   >
                     <option value="">Select a day</option>
@@ -733,7 +733,7 @@ export default function Dashboard() {
               <h2 className="text-2xl font-bold text-gray-800">Patient Management</h2>
               <div className="flex items-center space-x-4">
                 <select
-                  onChange={(e) => {
+                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                     const session = sessions.find(s => s._id === e.target.value);
                     if (session) {
                       setSelectedSession(session);
