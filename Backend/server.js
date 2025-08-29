@@ -250,7 +250,7 @@ app.post("/sessions/:id/stop", async (req, res) => {
 app.post("/", async (req, res) => {
   try {
     const number = req.body.no;
-    const match = number.slice(-10);
+    const match = number.slice(-11);
     const smsData = {
       from: match, // sender number
       message: req.body.key, // SMS text (should contain patient name)
