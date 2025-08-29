@@ -249,37 +249,42 @@ app.post("/sessions/:id/stop", async (req, res) => {
 });
 app.post("/", async (req, res) => {
   try {
-    const number = req.body.no;
-    const match = number.slice(-11);
+    console.log("📩 Incoming SMS request:", req.body);
+
+    // Extract number safely
+    let numberRaw = req.body.no || "";
+    let messageRaw = req.body.key || "";
+    const time = req.body.time || new Date().toISOString();
+
+    // Extract digits only (remove names, +91, brackets, spaces, etc.)
+    const digits = numberRaw.replace(/\D/g, ""); // keep only digits
+
+    // Handle common cases: keep last 10 digits (standard Indian mobile)
+    const phone = digits.slice(-10);
+
+    // Build SMS object
     const smsData = {
-      from: match, // sender number
-      message: req.body.key, // SMS text (should contain patient name)
-      time: req.body.time, // SMS time
+      from: phone,
+      message: messageRaw,
+      time,
     };
-   
-    if (!smsData.from || !smsData.message) {
-      return res.status(400).json({
-        error: "Phone number and message required",
-        received: smsData,
-      });
-    }
 
-    // Extract phone number and clean it (remove non-digits)
-    const phone = smsData.from.replace(/\D/g, "");
-
-    // Validate phone number (10 digits)
-    if (phone.length !== 10) {
+    // Validate phone number
+    if (!phone || phone.length !== 10) {
       return res.status(400).json({
         error: "Phone number must be exactly 10 digits",
-        received: smsData.from,
+        received: numberRaw,
+        cleaned: phone,
       });
     }
 
-    // Extract patient name from message (first word or entire message)
-    const name = smsData.message.trim();
+    // Clean patient name: trim + remove unwanted keywords like "Appointment"
+    let name = smsData.message.trim();
+    name = name.replace(/\b(Appointment|Token|Booking)\b/gi, "").trim();
+
     if (!name) {
       return res.status(400).json({
-        error: "Patient name is required in the message",
+        error: "Patient name is required in the message (excluding keywords)",
         received: smsData.message,
       });
     }
@@ -288,9 +293,7 @@ app.post("/", async (req, res) => {
     const today = new Date().toISOString().substring(0, 10);
 
     // Find today's active session
-    const session = await Session.findOne({
-      date: today,
-    });
+    const session = await Session.findOne({ date: today });
 
     if (!session) {
       return res.status(404).json({
@@ -300,7 +303,7 @@ app.post("/", async (req, res) => {
       });
     }
 
-    // Check if this phone number already has a booking for this session
+    // Check duplicate booking
     const existingPatient = await Patient.findOne({
       phone,
       sessionId: session._id,
@@ -350,13 +353,14 @@ app.post("/", async (req, res) => {
       },
     });
   } catch (err) {
-    console.error("SMS registration error:", err);
+    console.error("❌ SMS registration error:", err);
     res.status(500).json({
       error: "Internal server error",
       message: err.message,
     });
   }
 });
+
 app.post("/patient", async (req, res) => {
   try {
     const { name, phone, sessionId } = req.body;
