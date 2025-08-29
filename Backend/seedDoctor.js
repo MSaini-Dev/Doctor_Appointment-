@@ -16,15 +16,14 @@ const seedDoctor = async () => {
     const doctor = new Doctor({
       doctorId: "smith.doe",
       name: "Dr. Smith Doe",
-      passwordHash: "12345678", // plain, will be hashed by pre-save hook
+      passwordHash: "Smith123", // plain, will be hashed by pre-save hook
     });
 
     await doctor.save();
 
     console.log("✅ Dummy doctor inserted successfully");
-    console.log("👉 Login with:");
-    console.log("Doctor ID: m.saini.dev@gmail.com");
-    console.log("Password: 12345678");
+    console.log("Doctor ID:"+ doctor.doctorId);
+    console.log("Password:"+ doctor.passwordHash);
 
     process.exit(0);
   } catch (error) {

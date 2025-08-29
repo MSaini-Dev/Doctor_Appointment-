@@ -1,5 +1,5 @@
 import {Button} from '../ui/button';
-import {CheckCircle} from 'lucide-react';
+// import {CheckCircle} from 'lucide-react';
 import profile_pic from "../../assets/vecteezy_ai-generated-portrait-of-young-doctor-man-happy-smiling_41642113.png";
 
 interface Session {
@@ -18,64 +18,44 @@ interface HeroProps {
     liveSession?: Session;
     completedPatients?: number;
     isTodayHoliday?: boolean;
-  } | null;
+  }|null ;
 }
 const Hero: React.FC<HeroProps> = ({darkMode, liveSummary}) => {
   
   return (
-   <div
-        className={` ${
-          darkMode ? "bg-black-800" : "bg-white"
-        } shadow-sm min-h-screen flex items-center justify-center`}
-      >
-        <div className="w-full   h-screen flex flex-col gap-4 lg:flex-row  lg:items-center lg:justify-between transition-colors duration-300">
-          <div className="flex justify-center items-center h-full lg:w-1/2 ">
-            <div
-              className="flex justify-center items-end   h-full  aspect-[1/2] overflow-hidden "
-              style={{
-                backgroundImage: `url(${profile_pic})`,
-                backgroundSize: "contain",
-                backgroundPosition: "bottom",
-                backgroundRepeat: "no-repeat",
-              }}
-            ></div>
+    <>
+
+      <div className={`flex flex-col justify-between max-w-xl ${darkMode ? 'bg-gray-950 border-gray-800' : 'bg-white border-gray-200'} px-4 mx-auto lg:pt-16 lg:flex-row md:px-8 lg:max-w-screen-xl`}>
+      <div className="pt-16 mb-16 lg:mb-0 lg:pt-32 lg:max-w-lg lg:pr-5">
+        <div className="max-w-xl mb-6">
+          <div>
+            <p className="inline-block px-3 py-px mb-4 text-xs font-semibold tracking-wider uppercase rounded-full bg-teal-accent-400">
+              {liveSummary?liveSummary?.completedPatients:"0" } patients served today
+            </p>
           </div>
-          <div className="text-center lg:w-1/2 lg:text-left ">
-            {liveSummary?.liveSession && (
-              <div
-                className={`inline-flex items-center space-x-2 px-4 py-2  my-4  rounded-full ${
-                  darkMode
-                    ? "bg-green-900 text-green-100"
-                    : "bg-green-100 text-green-800"
-                }`}
-              >
-                <CheckCircle className="h-4 w-4" />
-                <span className="text-sm font-medium">
-                  {liveSummary.completedPatients} patients served today
-                </span>
-              </div>
-            )}
-            <h2
-              className={`text-3xl font-bold mb-4 ${
-                darkMode ? "text-white" : "text-gray-900"
-              }`}
-            >
-              Welcome to Dr. Smith's Clinic
-            </h2>
-            <p
-              className={`text-xl ${
-                darkMode ? "text-gray-300" : "text-gray-600"
-              } mb-8 max-w-3xl mx-auto`}
-            >
-              Providing exceptional healthcare services with a focus on patient
+          <h2 className="max-w-lg mb-6 font-sans text-3xl font-bold tracking-tight  sm:text-4xl sm:leading-none">
+            Welcome to Dr. Smith's Clinic
+          </h2>
+          <p className="text-base  md:text-lg">
+            Providing exceptional healthcare services with a focus on patient
               comfort and comprehensive care. Book your appointment online and
               experience quality medical treatment.
-            </p>
-
-            <Button>Book Appointment</Button>
-          </div>
+          </p>
+        </div>
+        <div className="flex items-center">
+          <Button>Book Appointment</Button>
+         
         </div>
       </div>
+      <div>
+        <img
+          src={profile_pic}
+          className="object-cover object-top w-full h-64 mx-auto lg:h-auto xl:mr-24 md:max-w-sm"
+          alt=""
+        />
+      </div>
+    </div>
+      </>
   );
 };
 

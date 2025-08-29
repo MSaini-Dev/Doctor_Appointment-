@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Calendar, Clock, Users, Plus, Trash2, Play, Square, CheckCircle, AlertCircle, Home, CalendarDays, UserCheck } from 'lucide-react';
-
+import { useAuth } from "@/context/AuthContext";
 export default function Dashboard(): JSX.Element {
+;
+ const { logout } = useAuth();
 
   const [activeTab, setActiveTab] = useState<string>(localStorage.getItem('activeTab') || 'overview');
   const [patients, setPatients] = useState<Array<any>>([]);
@@ -271,11 +273,13 @@ export default function Dashboard(): JSX.Element {
       </div>
     );
   }
+
+
 return (
     <div className="flex min-h-screen bg-sky-50">
       {/* Sidebar */}
-      <aside className="hidden lg:block w-64 bg-white shadow-xl border-r border-sky-100">
-        <div className="p-6 border-b border-sky-100">
+      <aside className="hidden lg:flex w-64 bg-white shadow-xl border-r border-sky-100 flex-col justify-between min-h-screen">
+        <div className="p-6 border-b border-sky-100 h-fit">
           <h1 className="text-2xl font-bold text-sky-900">Clinic Dashboard</h1>
           {liveSummary && (
             <div className="mt-3">
@@ -293,7 +297,7 @@ return (
           )}
         </div>
         
-        <nav className="mt-8 px-4">
+        <nav className="my-8 px-4 flex-1 flex  flex-col justify-between">
           <div className="space-y-3">
             <button
               onClick={() => setActiveTab('overview')}
@@ -354,6 +358,13 @@ return (
               <UserCheck className="w-5 h-5 mr-3" />
               Patient Management
             </button>
+          </div>
+          <div>
+            <button
+            onClick={()=>{logout()}}
+              className={`w-full flex items-center  justify-center bg-sky-500 text-white px-4 py-3 rounded-xl font-medium transition-all duration-200 `}
+
+            >Logout</button>
           </div>
         </nav>
       </aside>

@@ -48,7 +48,6 @@ function isHoliday(date, settings) {
 app.get('/', (req, res) => {
   res.send('Doctor Appointment Management Backend is running.');
 });
-// HOLIDAY MANAGEMENT
 app.post('/holidays', async (req, res) => {
   const { date } = req.body;
   if (!date) return res.status(400).json({ error: 'Date required.' });
@@ -63,7 +62,6 @@ app.post('/holidays', async (req, res) => {
     res.status(400).json({ error: 'Already a holiday.' });
   }
 });
-
 app.delete('/holidays/:date', async (req, res) => {
   const { date } = req.params;
   const settings = await getSettings();
@@ -71,8 +69,6 @@ app.delete('/holidays/:date', async (req, res) => {
   await settings.save();
   res.json({ success: true, message: 'Holiday removed.' });
 });
-
-// WEEKLY HOLIDAYS MANAGEMENT
 app.post('/weekly-holidays', async (req, res) => {
   const { day } = req.body;
   const validDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -99,7 +95,6 @@ app.post('/weekly-holidays', async (req, res) => {
     res.status(400).json({ error: `${day} is already a weekly holiday.` });
   }
 });
-
 app.delete('/weekly-holidays/:day', async (req, res) => {
   const { day } = req.params;
   const settings = await getSettings();
@@ -107,15 +102,12 @@ app.delete('/weekly-holidays/:day', async (req, res) => {
   await settings.save();
   res.json({ success: true, message: `${day} removed from weekly holidays.` });
 });
-
-// SESSION MANAGEMENT
 app.get('/sessions', async (req, res) => {
   const today = new Date().toISOString().substring(0, 10);
   await Session.deleteMany({ date: { $lt: today } });
   const sessions = await Session.find({ date: { $gte: today } }).sort({ date: 1, checkin: 1 });
   res.json(sessions);
 });
-
 app.get('/sessions/live-summary', async (req, res) => {
   try {
     const today = new Date().toISOString().substring(0, 10);
@@ -143,7 +135,6 @@ app.get('/sessions/live-summary', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
 app.post('/sessions', async (req, res) => {
   try {
     const { date, checkin, checkout, totalTokens } = req.body;
@@ -170,7 +161,6 @@ app.post('/sessions', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
 app.delete('/sessions/:id', async (req, res) => {
   try {
     const session = await Session.findByIdAndDelete(req.params.id);
@@ -184,7 +174,6 @@ app.delete('/sessions/:id', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
 app.post('/sessions/:id/start', async (req, res) => {
   try {
     // First, make sure no other session is active today
@@ -204,7 +193,6 @@ app.post('/sessions/:id/start', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
 app.post('/sessions/:id/stop', async (req, res) => {
   try {
     const session = await Session.findById(req.params.id);
@@ -216,8 +204,6 @@ app.post('/sessions/:id/stop', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
-// SMS-BASED PATIENT REGISTRATION
 app.post("/", async (req, res) => {
   try {
     const number  = req.body.no;
@@ -232,7 +218,7 @@ if (match) {
   const phone = match[0];
   console.log(phone); // "9876543210"
 } else {
-  return res.status(400).json({ error: 'Invalid phone number format. Must contain'})
+  return res.status(400).json({ error: `${req.body.no} Invalid phone number format. Must contain`})
         }    // Validate required fields
     if (!smsData.from || !smsData.message) {
       return res.status(400).json({ 
@@ -335,7 +321,6 @@ if (match) {
     });
   }
 });
-// PATIENT MANAGEMENT
 app.post('/patient', async (req, res) => {
   try {
     const { name, phone, sessionId } = req.body;
@@ -377,7 +362,6 @@ app.post('/patient', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
 app.get('/patients', async (req, res) => {
   try {
     const { sessionId } = req.query;
@@ -389,7 +373,6 @@ app.get('/patients', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
 app.patch('/patients/:id/status', async (req, res) => {
   try {
     const { status } = req.body;
@@ -410,8 +393,6 @@ app.patch('/patients/:id/status', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
-// DOCTOR LOGIN ENDPOINT
 app.post('/login', validateLoginData, async (req, res) => {
   try {
     const { doctorId, password } = req.body;
@@ -431,8 +412,6 @@ app.post('/login', validateLoginData, async (req, res) => {
     res.status(500).json({ success: false, message: 'Internal server error' });
   }
 });
-
-// Get current clinic settings
 app.get('/settings', async (req, res) => {
   try {
     const settings = await getSettings();
@@ -441,8 +420,6 @@ app.get('/settings', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
-// Update settings
 app.patch('/settings', async (req, res) => {
   try {
     const settings = await getSettings();
@@ -457,6 +434,8 @@ app.patch('/settings', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+
 
 const PORT = 4000;
 app.listen(PORT, () => {
