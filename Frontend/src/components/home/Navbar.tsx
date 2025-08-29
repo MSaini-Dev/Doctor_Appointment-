@@ -1,4 +1,4 @@
-import { Stethoscope, CheckCircle, AlertCircle, Moon, Sun } from 'lucide-react';
+import { CheckCircle, AlertCircle, Moon, Sun } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 
